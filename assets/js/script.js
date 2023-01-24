@@ -1,14 +1,14 @@
 var $currentDay = $("#currentDay");
 var $timeBlocks = $(".time-block");
+var $scheduleArea = $(".schedule");
 
 var toDoItems = [];
+//each object has a hour property and a text property
 
 var currentDate = moment().format("dddd, MMMM Do");
-var currentHour = moment().format("HH");
+var currentHour = moment().format("H");
 
-//Display date
-$currentDay.text(currentDate);
-
+//if we don't have any todos set up, let's set up the array of objects
 function initializeSchedule() {
 
     //for each time block
@@ -17,7 +17,6 @@ function initializeSchedule() {
         var thisBlockHr = parseInt($thisBlock.attr("data-hour"));
 
         var todoObj = {
-            //set related todo hour to same as data-hour
             hour: thisBlockHr,
             //get text ready to accept string input
             text: "",
@@ -26,12 +25,13 @@ function initializeSchedule() {
         toDoItems.push(todoObj);
     });
 
+
     // localStorage.setItem("todos", JSON.stringify(toDoItems));
-    localStorage.setItem("todos", JSON.stringify(toDoItems));
-    // console.log(toDoItems);
+    localStorage.setItem("todos", JSON.stringify(toDoItems))
+
 }
 
-
+//format timeblock colors depending on time
 function setUpTimeBlocks() {
     $timeBlocks.each(function () {
         var $thisBlock = $(this);
@@ -55,7 +55,6 @@ function renderSchedule() {
     toDoItems = localStorage.getItem("todos");
     toDoItems = JSON.parse(toDoItems);
 
-    //loop thru array then assign the text to the timeBlock with data-hour equal to hour. 
     //make a variable where [data-hour={hour}] then plug it in to the selector $('[data-hour={hour}')
     for (var i = 0; i < toDoItems.length; i++) {
         var itemHour = toDoItems[i].hour;
@@ -84,6 +83,7 @@ function saveHandler() {
     renderSchedule();
 }
 
+// when the document loads
 $(document).ready(function () {
 
     //format the timeblocks depending on time
@@ -99,7 +99,6 @@ $(document).ready(function () {
 
     //render schedule from local storage
     renderSchedule();
-    //when a todo item save button is clicked, save it
     $scheduleArea.on("click", "button", saveHandler);
 
 });
